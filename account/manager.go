@@ -27,7 +27,7 @@ func New(cfg *types.AccountConfig) *AccountManager {
 	}
 }
 
-func (m *AccountManager) NewAccount(ctx context.Context) (*types.Account, error) {
+func (m *AccountManager) NewAccount() (*types.Account, error) {
 	ctx, cancel := chrome.SetupChromedpContext()
 	defer cancel()
 
