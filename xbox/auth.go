@@ -31,29 +31,26 @@ type XBLAuthPoll struct {
 	ExpiresIn        int    `json:"expires_in"`
 }
 
-func beginXBLAuth(s chan (*oauth2.Token)) string {
-	d, err := startXBLAuth()
-	if err != nil {
-		return err.Error()
-	}
-
-	go startXBLPolling(d, s)
-
-	return d.UserCode
-}
-
-func startXBLPolling(d *XBLAuthConnect, s chan (*oauth2.Token)) {
+func startXBLPolling(d *XBLAuthConnect) *oauth2.Token {
 	ticker := time.NewTicker(time.Second * time.Duration(d.Interval))
 	defer ticker.Stop()
 
-	for range ticker.C {
-		t, err := pollXBLAuth(d.DeviceCode)
-		if err != nil {
-			panic(err)
-		}
-		if t != nil {
-			s <- t
-			return
+	timeout := time.After(time.Duration(d.ExpiresIn) * time.Second)
+
+	for {
+		select {
+		case <-ticker.C:
+			t, err := pollXBLAuth(d.DeviceCode)
+			if err != nil {
+				fmt.Println(err)
+				return nil
+			}
+			if t != nil {
+				fmt.Println("A")
+				return t
+			}
+		case <-timeout:
+			return nil
 		}
 	}
 }
