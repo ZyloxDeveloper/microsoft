@@ -41,7 +41,6 @@ func XBLToken(acc *types.Account) (*oauth2.Token, error) {
 
 	select {
 	case token := <-tokChan:
-		fmt.Println(token)
 		return token, nil
 	case err := <-errChan:
 		return nil, err
