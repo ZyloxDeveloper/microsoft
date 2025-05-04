@@ -31,7 +31,7 @@ type XBLAuthPoll struct {
 	ExpiresIn        int    `json:"expires_in"`
 }
 
-func startXBLPolling(d *XBLAuthConnect) *oauth2.Token {
+func startXBLPolling(d *XBLAuthConnect) (*oauth2.Token, error) {
 	ticker := time.NewTicker(time.Second * time.Duration(d.Interval))
 	defer ticker.Stop()
 
@@ -42,15 +42,14 @@ func startXBLPolling(d *XBLAuthConnect) *oauth2.Token {
 		case <-ticker.C:
 			t, err := pollXBLAuth(d.DeviceCode)
 			if err != nil {
-				fmt.Println(err)
-				return nil
+				return nil, err
 			}
 			if t != nil {
 				fmt.Println("A")
-				return t
+				return t, nil
 			}
 		case <-timeout:
-			return nil
+			return nil, fmt.Errorf("polling timeout exceded")
 		}
 	}
 }

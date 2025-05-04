@@ -28,7 +28,11 @@ func XBLToken(acc *types.Account) (*oauth2.Token, error) {
 
 	tokChan := make(chan *oauth2.Token, 0)
 	go func() {
-		tok := startXBLPolling(d)
+		tok, err := startXBLPolling(d)
+		if err != nil {
+			errChan <- err
+			return
+		}
 		if tok == nil {
 			errChan <- fmt.Errorf("received nil token")
 			return
