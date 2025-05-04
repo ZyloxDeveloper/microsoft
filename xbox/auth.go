@@ -45,7 +45,6 @@ func startXBLPolling(d *XBLAuthConnect) (*oauth2.Token, error) {
 				return nil, err
 			}
 			if t != nil {
-				fmt.Println("A")
 				return t, nil
 			}
 		case <-timeout:
