@@ -31,7 +31,7 @@ type XBLAuthPoll struct {
 	ExpiresIn        int    `json:"expires_in"`
 }
 
-func beginXBLAuth(s chan(*oauth2.Token)) string {
+func beginXBLAuth(s chan (*oauth2.Token)) string {
 	d, err := startXBLAuth()
 	if err != nil {
 		return err.Error()
@@ -42,7 +42,7 @@ func beginXBLAuth(s chan(*oauth2.Token)) string {
 	return d.UserCode
 }
 
-func startXBLPolling(d *XBLAuthConnect, s chan(*oauth2.Token)) {
+func startXBLPolling(d *XBLAuthConnect, s chan (*oauth2.Token)) {
 	ticker := time.NewTicker(time.Second * time.Duration(d.Interval))
 	defer ticker.Stop()
 
