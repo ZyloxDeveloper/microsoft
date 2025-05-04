@@ -14,7 +14,7 @@ type Account struct {
 	Birthday time.Time
 }
 
-type AccountConfig struct {
+type MicrosoftConfig struct {
 	Mail   mailtracker.TrackerConfig
 	Domain string
 }

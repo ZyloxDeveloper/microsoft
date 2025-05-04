@@ -17,12 +17,12 @@ import (
 )
 
 type AccountManager struct {
-	config   *types.AccountConfig
+	config   *types.MicrosoftConfig
 	mail     *mailtracker.Tracker
 	accounts []*types.Account
 }
 
-func New(cfg *types.AccountConfig) *AccountManager {
+func New(cfg *types.MicrosoftConfig) *AccountManager {
 	return &AccountManager{
 		config: cfg,
 		mail:   mailtracker.NewTracker(cfg.Mail),
