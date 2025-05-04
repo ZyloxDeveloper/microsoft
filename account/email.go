@@ -3,6 +3,7 @@ package account
 import (
 	"fmt"
 	"regexp"
+	"sync"
 	"time"
 
 	"github.com/zyloxdeveloper/mailtracker"
@@ -10,17 +11,22 @@ import (
 
 func (m *AccountManager) setupEmailListener() <-chan string {
 	codeChan := make(chan string, 1)
+	var once sync.Once
+
 	go m.mail.Start(func(email mailtracker.Email) {
 		code := extractCode(email.Body)
 		if code != "" {
-			codeChan <- code
-			m.mail.Stop()
+			once.Do(func() {
+				codeChan <- code
+				m.mail.Stop()
+			})
 		}
 	})
+
 	return codeChan
 }
 
-var codeRegex = regexp.MustCompile(`\b\d{6,8}\b`)
+var codeRegex = regexp.MustCompile(`(?i)(?:code|otp|verification)[^\d]{0,10}(\d{6})`)
 func extractCode(body string) string {
 	return codeRegex.FindString(body)
 }
