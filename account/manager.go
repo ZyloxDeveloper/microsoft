@@ -12,6 +12,8 @@ import (
 	"github.com/zyloxdeveloper/mailtracker"
 	"github.com/zyloxdeveloper/microsoft/chrome"
 	"github.com/zyloxdeveloper/microsoft/types"
+	"github.com/zyloxdeveloper/microsoft/xbox"
+	"golang.org/x/oauth2"
 )
 
 type AccountManager struct {
@@ -23,12 +25,12 @@ type AccountManager struct {
 func New(cfg *types.AccountConfig) *AccountManager {
 	return &AccountManager{
 		config: cfg,
-		mail:   mailtracker.NewTracker(cfg.MailConfig),
+		mail:   mailtracker.NewTracker(cfg.Mail),
 	}
 }
 
 func (m *AccountManager) NewAccount() (*types.Account, error) {
-	ctx, cancel := chrome.SetupChromedpContext()
+	ctx, cancel := chrome.SetupChromedpContext(false)
 	defer cancel()
 
 	acc, err := m.randomAccount()
@@ -58,6 +60,24 @@ func (m *AccountManager) NewAccount() (*types.Account, error) {
 	return acc, nil
 }
 
+func (m *AccountManager) NewXboxAccount() (*types.Account, *oauth2.Token, error) {
+	acc, err := m.NewAccount()
+	if err != nil {
+		return nil, nil, err 
+	}
+
+	tok, err := xbox.XBLToken(acc)
+	if err != nil {
+		return acc, nil, err
+	}
+
+	if tok == nil {
+		return acc, nil, fmt.Errorf("invalid token")
+	}
+
+	return acc, tok, nil
+}
+
 func (m *AccountManager) submitVerificationCode(ctx context.Context, code string) error {
 	err := chromedp.Run(ctx,
 		chromedp.WaitVisible(`#VerificationCode`, chromedp.ByID),
@@ -75,7 +95,7 @@ func (m *AccountManager) randomAccount() (*types.Account, error) {
 	const passwordCharset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*?"
 
 	emailPrefix := randomString(10, emailCharset)
-	email := fmt.Sprintf("%s@%s", emailPrefix, m.config.EmailDomain)
+	email := fmt.Sprintf("%s@%s", emailPrefix, m.config.Domain)
 	password := randomString(12, passwordCharset)
 
 	return &types.Account{
@@ -87,16 +107,17 @@ func (m *AccountManager) randomAccount() (*types.Account, error) {
 	}, nil
 }
 
-func extractCode(body string) string {
-	re := regexp.MustCompile(`\b\d{4,8}\b`)
-	return re.FindString(body)
-}
+var seededRand = rand.New(rand.NewSource(time.Now().UnixNano()))
+var codeRegex = regexp.MustCompile(`\b\d{4,8}\b`)
 
 func randomString(length int, charset string) string {
-	rand.Seed(time.Now().UnixNano())
 	builder := strings.Builder{}
 	for i := 0; i < length; i++ {
-		builder.WriteByte(charset[rand.Intn(len(charset))])
+		builder.WriteByte(charset[seededRand.Intn(len(charset))])
 	}
 	return builder.String()
+}
+
+func extractCode(body string) string {
+	return codeRegex.FindString(body)
 }

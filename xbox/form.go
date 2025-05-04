@@ -11,9 +11,9 @@ import (
 )
 
 func registerXboxProfile(acc *types.Account) error {
-	ctx, cancel := chrome.SetupChromedpContext()
-	defer cancel()
-
+	ctx, close := chrome.SetupChromedpContext(true)
+	defer close()
+	
 	return chromedp.Run(ctx,
 		chromedp.Navigate("https://www.xbox.com/en-US/auth/msa?action=logIn&returnUrl=https%3A%2F%2Fwww.xbox.com%2Fen-US&ru=https%3A%2F%2Fwww.xbox.com%2Fen-US"),
 
@@ -87,7 +87,7 @@ func registerXboxProfile(acc *types.Account) error {
 
 
 func submitRemoteConnectCode(acc *types.Account, code string) error {
-	ctx, close := chrome.SetupChromedpContext()
+	ctx, close := chrome.SetupChromedpContext(true)
 	defer close()
 
 	c := chromedp.Run(ctx,
