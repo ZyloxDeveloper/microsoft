@@ -26,7 +26,7 @@ func (m *AccountManager) setupEmailListener() <-chan string {
 	return codeChan
 }
 
-var codeRegex = regexp.MustCompile(`(?i)(?:code|otp|verification)[^\d]{0,10}(\d{6})`)
+var codeRegex = regexp.MustCompile(`(?i)security code[:\s]+(\d{6})`)
 func extractCode(body string) string {
 	matches := codeRegex.FindStringSubmatch(body)
 	if len(matches) > 1 {
