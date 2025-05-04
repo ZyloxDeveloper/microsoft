@@ -47,4 +47,3 @@ func (m *AccountManager) waitForManualCaptchaSolve(ctx context.Context) error {
 		}),
 	)
 }
-

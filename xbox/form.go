@@ -13,7 +13,7 @@ import (
 func registerXboxProfile(acc *types.Account) error {
 	ctx, close := chrome.SetupChromedpContext(true)
 	defer close()
-	
+
 	return chromedp.Run(ctx,
 		chromedp.Navigate("https://www.xbox.com/en-US/auth/msa?action=logIn&returnUrl=https%3A%2F%2Fwww.xbox.com%2Fen-US&ru=https%3A%2F%2Fwww.xbox.com%2Fen-US"),
 
@@ -34,11 +34,19 @@ func registerXboxProfile(acc *types.Account) error {
 		chromedp.WaitVisible(`#inline-continue-control`, chromedp.ByID),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			for i := 0; i < 400; i++ {
-				switch(i) {
-					case 0: chromedp.Click(`#create-account-gamertag-suggestion-1`, chromedp.ByID).Do(ctx); break;
-					case 100: chromedp.Click(`#create-account-gamertag-suggestion-2`, chromedp.ByID).Do(ctx); break;
-					case 200: chromedp.Click(`#create-account-gamertag-suggestion-3`, chromedp.ByID).Do(ctx); break;
-					case 300: chromedp.Click(`#create-account-gamertag-suggestion-4`, chromedp.ByID).Do(ctx); break;
+				switch i {
+				case 0:
+					chromedp.Click(`#create-account-gamertag-suggestion-1`, chromedp.ByID).Do(ctx)
+					break
+				case 100:
+					chromedp.Click(`#create-account-gamertag-suggestion-2`, chromedp.ByID).Do(ctx)
+					break
+				case 200:
+					chromedp.Click(`#create-account-gamertag-suggestion-3`, chromedp.ByID).Do(ctx)
+					break
+				case 300:
+					chromedp.Click(`#create-account-gamertag-suggestion-4`, chromedp.ByID).Do(ctx)
+					break
 				}
 				var disabled bool
 				err := chromedp.Evaluate(`document.getElementById("inline-continue-control")?.disabled === true`, &disabled).Do(ctx)
@@ -84,7 +92,6 @@ func registerXboxProfile(acc *types.Account) error {
 		}),
 	)
 }
-
 
 func submitRemoteConnectCode(acc *types.Account, code string) error {
 	ctx, close := chrome.SetupChromedpContext(true)

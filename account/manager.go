@@ -63,7 +63,7 @@ func (m *AccountManager) NewAccount() (*types.Account, error) {
 func (m *AccountManager) NewXboxAccount() (*types.Account, *oauth2.Token, error) {
 	acc, err := m.NewAccount()
 	if err != nil {
-		return nil, nil, err 
+		return nil, nil, err
 	}
 
 	tok, err := xbox.XBLToken(acc)

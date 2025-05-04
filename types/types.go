@@ -15,6 +15,6 @@ type Account struct {
 }
 
 type AccountConfig struct {
-	Mail  mailtracker.TrackerConfig
+	Mail   mailtracker.TrackerConfig
 	Domain string
 }
