@@ -35,10 +35,10 @@ func registerXboxProfile(acc *types.Account) error {
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			for i := 0; i < 400; i++ {
 				switch(i) {
-					case 0: chromedp.Click(`#create-account-gamertag-suggestion-1`, chromedp.ByID); break;
-					case 100: chromedp.Click(`#create-account-gamertag-suggestion-2`, chromedp.ByID); break;
-					case 200: chromedp.Click(`#create-account-gamertag-suggestion-3`, chromedp.ByID); break;
-					case 300: chromedp.Click(`#create-account-gamertag-suggestion-4`, chromedp.ByID); break;
+					case 0: chromedp.Click(`#create-account-gamertag-suggestion-1`, chromedp.ByID).Do(ctx); break;
+					case 100: chromedp.Click(`#create-account-gamertag-suggestion-2`, chromedp.ByID).Do(ctx); break;
+					case 200: chromedp.Click(`#create-account-gamertag-suggestion-3`, chromedp.ByID).Do(ctx); break;
+					case 300: chromedp.Click(`#create-account-gamertag-suggestion-4`, chromedp.ByID).Do(ctx); break;
 				}
 				var disabled bool
 				err := chromedp.Evaluate(`document.getElementById("inline-continue-control")?.disabled === true`, &disabled).Do(ctx)
