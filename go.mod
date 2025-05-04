@@ -4,7 +4,7 @@ go 1.24.2
 
 require (
 	github.com/chromedp/chromedp v0.13.6
-	github.com/zyloxdeveloper/mailtracker v0.0.0-20250504073234-8b88d7b5332f
+	github.com/zyloxdeveloper/mailtracker v0.0.0-20250504075053-168481dd1646
 	golang.org/x/oauth2 v0.29.0
 )
 

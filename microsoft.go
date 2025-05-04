@@ -26,7 +26,8 @@ func NewMailConfig(imapserver, email, password string) mailtracker.TrackerConfig
 		EmailAddress: email,
 		EmailPassword: password,
 		CheckInterval: time.Second,
-		CacheInterval: time.Second*10,
+		CacheInterval: time.Second*30,
+		DeleteCached: true,
 	}
 }
 
