@@ -1,6 +1,8 @@
 package microsoft
 
 import (
+	"time"
+
 	"github.com/zyloxdeveloper/mailtracker"
 	"github.com/zyloxdeveloper/microsoft/account"
 	"github.com/zyloxdeveloper/microsoft/types"
@@ -12,6 +14,19 @@ func NewConfig(domain string, mailCfg mailtracker.TrackerConfig) *types.Microsof
 	return &types.MicrosoftConfig{
 		Domain: domain,
 		Mail:   mailCfg,
+	}
+}
+
+// NewMailConfig returns a pre-filled mailtracker.TrackerConfig with default intervals,
+// using the provided IMAP server, email address, and password.
+// https://github.com/ZyloxDeveloper/mailtracker
+func NewMailConfig(imapserver, email, password string) mailtracker.TrackerConfig {
+	return mailtracker.TrackerConfig{
+		IMAPServer: imapserver,
+		EmailAddress: email,
+		EmailPassword: password,
+		CheckInterval: time.Second,
+		CacheInterval: time.Second*10,
 	}
 }
 
