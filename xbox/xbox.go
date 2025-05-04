@@ -1,8 +1,6 @@
 package xbox
 
 import (
-	"time"
-
 	"github.com/zyloxdeveloper/microsoft/types"
 	"golang.org/x/oauth2"
 )
@@ -18,8 +16,6 @@ func XBLToken(acc *types.Account) (*oauth2.Token, error) {
 	if err := submitRemoteConnectCode(acc, code); err != nil {
 		return nil, err
 	}
-
-	time.Sleep(time.Minute)
 
 	t := <- c
 	return t, nil
