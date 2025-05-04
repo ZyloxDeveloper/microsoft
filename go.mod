@@ -4,7 +4,8 @@ go 1.24.2
 
 require (
 	github.com/chromedp/chromedp v0.13.6
-	github.com/zyloxdeveloper/mailtracker v0.0.0-20250422043344-6fdd0ed8d59f
+	github.com/zyloxdeveloper/mailtracker v0.0.0-20250504070806-f8cd9e0caa71
+	golang.org/x/oauth2 v0.29.0
 )
 
 require (
@@ -38,7 +39,6 @@ require (
 	golang.org/x/crypto v0.33.0 // indirect
 	golang.org/x/image v0.21.0 // indirect
 	golang.org/x/net v0.35.0 // indirect
-	golang.org/x/oauth2 v0.29.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect

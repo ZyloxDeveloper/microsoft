@@ -12,10 +12,7 @@ func (m *AccountManager) setupEmailListener() <-chan string {
 	go m.mail.Start(func(email mailtracker.Email) {
 		code := extractCode(email.Body)
 		if code != "" {
-			select {
-			case codeChan <- code:
-			default:
-			}
+			codeChan <- code
 			m.mail.Stop()
 		}
 	})
