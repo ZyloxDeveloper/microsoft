@@ -6,7 +6,32 @@ import (
 	"github.com/zyloxdeveloper/microsoft/types"
 )
 
-func submitRemoteConnectCode( acc *types.Account, code string) error {
+func registerXboxProfile(acc *types.Account) error {
+	ctx, cancel := chrome.SetupChromedpContext()
+	defer cancel()
+
+	return chromedp.Run(ctx,
+		chromedp.Navigate("https://www.xbox.com/en-US/auth/msa?action=logIn&returnUrl=https%3A%2F%2Fwww.xbox.com%2Fen-US&ru=https%3A%2F%2Fwww.xbox.com%2Fen-US"),
+
+		chromedp.WaitVisible(`#usernameEntry`, chromedp.ByID),
+		chromedp.SendKeys(`#usernameEntry`, acc.Email, chromedp.ByID),
+		chromedp.Click(`[data-testid="primaryButton"]`, chromedp.ByQuery),
+
+		chromedp.WaitVisible(`#passwordEntry`, chromedp.ByID),
+		chromedp.SendKeys(`#passwordEntry`, acc.Password, chromedp.ByID),
+		chromedp.Click(`[data-testid="primaryButton"]`, chromedp.ByQuery),
+
+		chromedp.WaitVisible(`[data-testid="secondaryButton"]`, chromedp.ByQuery),
+		chromedp.Click(`[data-testid="secondaryButton"]`, chromedp.ByQuery),
+
+		chromedp.WaitVisible(`#create-account-gamertag-suggestion-1`, chromedp.ByID),
+		chromedp.Click(`#create-account-gamertag-suggestion-1`, chromedp.ByID),
+
+		chromedp.Click(`#inline-continue-control`, chromedp.ByID),
+	)
+}
+
+func submitRemoteConnectCode(acc *types.Account, code string) error {
 	ctx, close := chrome.SetupChromedpContext()
 	defer close()
 
