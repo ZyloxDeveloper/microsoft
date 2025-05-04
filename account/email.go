@@ -28,7 +28,11 @@ func (m *AccountManager) setupEmailListener() <-chan string {
 
 var codeRegex = regexp.MustCompile(`(?i)(?:code|otp|verification)[^\d]{0,10}(\d{6})`)
 func extractCode(body string) string {
-	return codeRegex.FindString(body)
+	matches := codeRegex.FindStringSubmatch(body)
+	if len(matches) > 1 {
+		return matches[1]
+	}
+	return ""
 }
 
 func (m *AccountManager) waitForVerificationCode(codeChan <-chan string) (string, error) {
