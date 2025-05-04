@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
-	"regexp"
 	"strings"
 	"time"
 
@@ -108,7 +107,6 @@ func (m *AccountManager) randomAccount() (*types.Account, error) {
 }
 
 var seededRand = rand.New(rand.NewSource(time.Now().UnixNano()))
-var codeRegex = regexp.MustCompile(`\b\d{4,8}\b`)
 
 func randomString(length int, charset string) string {
 	builder := strings.Builder{}
@@ -116,8 +114,4 @@ func randomString(length int, charset string) string {
 		builder.WriteByte(charset[seededRand.Intn(len(charset))])
 	}
 	return builder.String()
-}
-
-func extractCode(body string) string {
-	return codeRegex.FindString(body)
 }

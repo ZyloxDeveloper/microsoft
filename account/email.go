@@ -2,6 +2,7 @@ package account
 
 import (
 	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/zyloxdeveloper/mailtracker"
@@ -17,6 +18,11 @@ func (m *AccountManager) setupEmailListener() <-chan string {
 		}
 	})
 	return codeChan
+}
+
+var codeRegex = regexp.MustCompile(`\b\d{6,8}\b`)
+func extractCode(body string) string {
+	return codeRegex.FindString(body)
 }
 
 func (m *AccountManager) waitForVerificationCode(codeChan <-chan string) (string, error) {

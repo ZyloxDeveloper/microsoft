@@ -34,7 +34,6 @@ func XBLToken(acc *types.Account) (*oauth2.Token, error) {
 			return
 		}
 		if tok == nil {
-			errChan <- fmt.Errorf("received nil token")
 			return
 		}
 		tokChan <- tok
